@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jarvis</title>
+<link rel="stylesheet" href="/static/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>&#9673;</text></svg>">
+</head>
+<body>
+
+<header class="bar">
+  <div class="who">
+    <span class="orb" id="orb"></span>
+    <h1 id="title">Jarvis</h1>
+    <span class="tag" id="tagline">ready</span>
+  </div>
+  <div class="controls">
+    <label class="vol">
+      volume
+      <input type="range" id="volume" min="0" max="100" value="80">
+    </label>
+    <button id="mute" class="ghost" title="Stop playing replies">sound on</button>
+    <button id="stop" class="ghost danger" title="Close the interface">close</button>
+  </div>
+</header>
+
+<main>
+  <section class="panel transcript">
+    <h2>Conversation</h2>
+    <div id="log" class="log" aria-live="polite"></div>
+
+    <form id="form" class="composer">
+      <button type="button" id="mic" class="mic" title="Hold to speak">
+        <span class="dot"></span>
+        <span class="label">hold to talk</span>
+      </button>
+      <input id="input" type="text" autocomplete="off" spellcheck="false"
+             placeholder="Type a command, or hold the microphone and speak">
+      <button type="submit" class="send">send</button>
+    </form>
+    <div class="meter"><i id="level"></i></div>
+  </section>
+
+  <aside class="side">
+    <section class="panel" id="articlePanel" hidden>
+      <h2>From Wikipedia</h2>
+      <div id="article" class="article"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Results</h2>
+      <div id="results" class="results">
+        <p class="empty">Nothing found yet. Say “open my cv”.</p>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Try saying</h2>
+      <div id="chips" class="chips"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Details</h2>
+      <pre id="console" class="console"></pre>
+    </section>
+  </aside>
+</main>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
