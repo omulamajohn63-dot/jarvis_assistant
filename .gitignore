@@ -1,2 +1,19 @@
 .venv
+.venv/
 /.idea
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Secrets. AI keys and speech keys live here; the example file does not.
+.env
+
+# Audio rendered on the fly by the browser interface.
+/*.wav
+
+# Written at runtime by the assistant.
+data/assistant_name.txt
+logs/

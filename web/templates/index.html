@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JARVIS — Personal Assistant</title>
+  <!-- Opened as a file, the assets sit next to this template. Served by Flask
+       they live under /static, so the sibling copy is tried first and the
+       server's copy is the fallback. Either way the page is styled. -->
+  <link rel="stylesheet" href="styles.css"
+        onerror="this.onerror=null;this.href='/static/styles.css'" />
+  <script>
+    addEventListener("load", function () {
+      var link = document.querySelector('link[rel="stylesheet"]');
+      if (link && !link.sheet) link.href = "/static/styles.css";
+    });
+  </script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">J</div>
+        <div>
+          <div class="brand-name">JARVIS</div>
+          <div class="brand-sub">PERSONAL ASSISTANT</div>
+        </div>
+      </div>
+
+      <div class="core-module">
+        <div class="orb-label">JARVIS CORE</div>
+        <div class="orb-wrap" id="orbWrap">
+          <div class="orb-ring ring-1"></div>
+          <div class="orb-ring ring-2"></div>
+          <div class="orb-ring ring-3"></div>
+          <div class="orb">
+            <span class="orb-core"></span>
+            <span class="orb-glow"></span>
+          </div>
+        </div>
+        <div class="listening" id="listeningState">READY</div>
+        <p class="orb-hint" id="orbHint">Press and hold to talk</p>
+        <button class="talk-button" id="talkButton">
+          <span class="mic">●</span>
+          <span id="talkText">Hold to talk</span>
+        </button>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-item active" data-view="assistant">
+          <span class="nav-icon">◉</span><span>Assistant</span>
+        </button>
+        <button class="nav-item" data-view="activity">
+          <span class="nav-icon">◌</span><span>Activity</span>
+        </button>
+        <button class="nav-item" data-view="memory">
+          <span class="nav-icon">◇</span><span>Memory</span>
+        </button>
+        <button class="nav-item" data-view="skills">
+          <span class="nav-icon">⌘</span><span>Skills</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="connection-card">
+          <span class="status-dot"></span>
+          <div>
+            <strong id="connectionText">Local system</strong>
+            <small>127.0.0.1</small>
+          </div>
+        </div>
+        <button class="nav-item" data-view="settings">
+          <span class="nav-icon">⚙</span><span>Settings</span>
+        </button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <div class="eyebrow" id="viewEyebrow">SYSTEM ONLINE</div>
+          <h1 id="viewTitle">How can I help?</h1>
+        </div>
+        <div class="top-actions">
+          <button class="ghost-button" id="clearChat">Clear</button>
+          <button class="icon-button" id="soundToggle" title="Toggle sound">◉</button>
+          <div class="avatar">S</div>
+        </div>
+      </header>
+
+      <section class="content">
+        <div class="view active" id="assistantView">
+          <div class="chat">
+            <div class="messages" id="messages">
+              <article class="message assistant">
+                <div class="message-avatar">J</div>
+                <div class="message-body">
+                  <div class="message-meta">JARVIS · NOW</div>
+                  <p>Systems are online. How can I help?</p>
+                </div>
+              </article>
+            </div>
+
+            <div class="chat-foot">
+              <div class="quick-actions">
+                <button data-command="what is the time">Time</button>
+                <button data-command="open chrome">Open Chrome</button>
+                <button data-command="open downloads">Downloads</button>
+                <button data-command="what can you do">Capabilities</button>
+              </div>
+              <form class="composer" id="composer">
+                <input id="commandInput" autocomplete="off"
+                  placeholder="Ask Jarvis anything..." />
+                <button type="submit" class="send-button">→</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="view" id="activityView">
+          <div class="page-head"><span class="eyebrow">EVENT STREAM</span><h2>Activity</h2><p>Everything Jarvis has been asked to do and every tool that has run.</p></div>
+          <div class="panel full"><div id="activityList" class="activity-list"></div></div>
+        </div>
+
+        <div class="view" id="memoryView">
+          <div class="page-head"><span class="eyebrow">PERSISTENT CONTEXT</span><h2>Memory</h2><p>Nothing is stored unless you explicitly ask Jarvis to remember it.</p></div>
+          <div class="panel full">
+            <div class="memory-toolbar"><button class="danger-button" id="clearMemory">Clear memory</button></div>
+            <div id="memoryList" class="memory-list"><div class="empty">No memory items loaded.</div></div>
+          </div>
+        </div>
+
+        <div class="view" id="skillsView">
+          <div class="page-head"><span class="eyebrow">CAPABILITIES</span><h2>Skills</h2><p>Registered skills available to Jarvis.</p></div>
+          <div class="skill-grid" id="skillGrid"></div>
+        </div>
+
+        <div class="view" id="settingsView">
+          <div class="page-head"><span class="eyebrow">CONFIGURATION</span><h2>Settings</h2><p>Dashboard preferences and assistant configuration.</p></div>
+          <div class="panel settings-grid">
+            <label><span>Voice enabled</span><input type="checkbox" id="voiceSetting" checked></label>
+            <label><span>Wake word enabled</span><input type="checkbox" id="wakeSetting"></label>
+            <label><span>Memory enabled</span><input type="checkbox" id="memorySetting" checked></label>
+            <label><span>Confirm dangerous actions</span><input type="checkbox" id="confirmSetting" checked></label>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal hidden" id="confirmModal">
+    <div class="modal-card">
+      <div class="modal-icon">!</div>
+      <span class="eyebrow">CONFIRMATION REQUIRED</span>
+      <h2 id="confirmTitle">Are you sure?</h2>
+      <p id="confirmText">This action can change your Windows system.</p>
+      <div class="modal-actions">
+        <button class="ghost-button" id="cancelConfirm">No, cancel</button>
+        <button class="danger-button" id="approveConfirm">Yes, continue</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js" onerror="this.onerror=null;this.src='/static/app.js'"></script>
+</body>
+</html>
